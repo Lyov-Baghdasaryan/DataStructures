@@ -8,7 +8,7 @@ int main()
 	const int size = sizeof(arr) / sizeof(char);
 
 	char result = FindFirstSymbol(arr, size);
-	std::cout << "size : " << result << std::endl;
+	std::cout << "Result : " << result << std::endl;
 
 	return 0;
 }
