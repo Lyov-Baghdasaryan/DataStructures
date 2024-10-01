@@ -26,11 +26,11 @@ class Vector{
         void clear();
         bool empty() const;
         // 6
-        Vector(const Vector<T>&);
-        bool operator==(const Vector<T>&);
-        bool operator!=(const Vector<T>&);
+        Vector(const Vector&);
+        bool operator==(const Vector&);
+        bool operator!=(const Vector&);
         // 7
-        void operator=(const Vector<T>&);
+        Vector& operator=(const Vector&);
         // 8
         T& at(size_t) const;
         T& front() const;
@@ -41,14 +41,14 @@ class Vector{
         int capacity() const;
         void shrink_to_fit();
         // 10
-        void swap(Vector<T>&);
+        void swap(Vector&);
         // 11
         const T& operator[](size_t) const;
         // 12
         ~Vector();
-        // 16  Stexel er EmplaceBack uzum
-        Vector(Vector<T>&&);
-        void operator=(Vector<T>&&);
+        // 16
+        Vector(Vector&&);
+        Vector& operator=(Vector&&);
 
     private:
         size_t m_size;
@@ -189,7 +189,10 @@ bool Vector<T>::operator!= (const Vector<T>& other){
 }
 
 template<class T>
-void Vector<T>::operator=(const Vector<T>& other){
+Vector<T>& Vector<T>::operator=(const Vector<T>& other){
+    if(this == &other){
+        return *this;
+    }
     if(m_capacity < other.m_capacity){
         deallocFoo<T>(m_data,m_size);
         m_data = allocFoo<T>(other.m_capacity);
@@ -199,10 +202,15 @@ void Vector<T>::operator=(const Vector<T>& other){
     for(size_t i = 0; i < m_size; i++){
         m_data[i] = other.m_data[i];
     }
+
+    return *this;
 }
 
 template <class T>
-void Vector<T>::operator=(Vector<T>&& other){
+Vector<T>& Vector<T>::operator=(Vector<T>&& other){
+    if(this == &other){
+        return *this;
+    }
     if(m_capacity < other.m_capacity){
         deallocFoo<T>(m_data, m_size);
     }
@@ -212,6 +220,8 @@ void Vector<T>::operator=(Vector<T>&& other){
     other.m_capacity = 0;
     other.m_size = 0;
     other.m_data = nullptr;
+
+    return *this;
 }
 
 template <class T>
