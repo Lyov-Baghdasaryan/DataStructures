@@ -11,7 +11,7 @@ add_executable(Vector
     Tests/Fixtures/CustomAsserts.cpp
     Tests/Fixtures/CustomAsserts.h
     Tests/10SwapTest.h
-    Tests/11SubscriptOperatorTest.h:w
+    Tests/11SubscriptOperatorTest.h
     Tests/12DestructorCallTest.h
     Tests/13EmplaceBackTest.h
     Tests/14ClassWithoutDefaultConstructorTest.h
