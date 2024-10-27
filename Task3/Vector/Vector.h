@@ -50,6 +50,9 @@ class Vector{
         Vector(Vector&&);
         Vector& operator=(Vector&&);
 
+        void reverse();
+        void merge(const Vector& other);
+
     private:
         size_t m_size;
         size_t m_capacity;
@@ -170,7 +173,7 @@ bool Vector<T>::empty() const{
 }
 
 template <class T>
-bool Vector<T>::operator==(const Vector<T>& other){
+bool Vector<T>::operator==(const Vector& other){
     if(m_size != other.m_size){
         return false;
     }
@@ -184,12 +187,12 @@ bool Vector<T>::operator==(const Vector<T>& other){
 }
 
 template <class T>
-bool Vector<T>::operator!= (const Vector<T>& other){
+bool Vector<T>::operator!= (const Vector& other){
     return !(*this == other);
 }
 
 template<class T>
-Vector<T>& Vector<T>::operator=(const Vector<T>& other){
+Vector<T>& Vector<T>::operator=(const Vector& other){
     if(this == &other){
         return *this;
     }
@@ -207,7 +210,7 @@ Vector<T>& Vector<T>::operator=(const Vector<T>& other){
 }
 
 template <class T>
-Vector<T>& Vector<T>::operator=(Vector<T>&& other){
+Vector<T>& Vector<T>::operator=(Vector&& other){
     if(this == &other){
         return *this;
     }
@@ -273,7 +276,7 @@ void Vector<T>::shrink_to_fit(){
 }
 
 template <class T>
-void Vector<T>::swap(Vector<T>& other){
+void Vector<T>::swap(Vector& other){
     size_t tmp1 = m_size;
     m_size = other.m_size;
     other.m_size = tmp1;
@@ -292,3 +295,30 @@ const T& Vector<T>::operator[](size_t i) const{
     return m_data[i];
 }
 
+template<class T>
+void Vector<T>::reverse(){
+    for(size_t i = 0; i < m_size / 2; i++){
+        std::swap(m_data[i], m_data[m_size - 1 - i]);
+    }
+}
+
+template<class T>
+void Vector<T>::merge(const Vector& other) {
+    Vector res;
+    res.reserve(m_size + other.m_size);
+    size_t i = 0, j = 0;
+    while(i < m_size && j < other.m_size){
+        if(m_data[i] < other.m_data[j]){
+            res.push_back(std::move(m_data[i++]));
+        }else{
+            res.push_back(std::move(other.m_data[j++]));
+        }
+    }
+    while(i < m_size){
+        res.push_back(std::move(m_data[i++]));
+    }
+    while(j < other.m_size){
+        res.push_back(std::move(other.m_data[j++]));
+    }
+    *this = std::move(res);
+}
